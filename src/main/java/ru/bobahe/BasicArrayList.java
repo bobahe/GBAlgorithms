@@ -61,16 +61,17 @@ public class BasicArrayList<E extends Object & Comparable<E>> implements BasicLi
         int highEdge = pointer - 1;
         int lowEdge = 0;
 
-        while (highEdge - lowEdge > 1) {
+        while (lowEdge <= highEdge) {
             int middle = (highEdge + lowEdge) / 2;
 
-            if (data[middle].equals(element))
+            if (data[middle].equals(element)) {
                 return middle;
+            }
 
             if (data[middle].compareTo(element) < 0) {
-                lowEdge = middle;
-            } else {
-                highEdge = middle;
+                lowEdge = middle + 1;
+            } else if (data[middle].compareTo(element) > 0) {
+                highEdge = middle - 1;
             }
         }
 

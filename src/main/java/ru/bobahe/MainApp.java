@@ -10,7 +10,7 @@ public class MainApp {
         INSERTION
     }
 
-    private static final int DEFAULT_ARRAY_LENGTH = 100_000;
+    private static final int DEFAULT_ARRAY_LENGTH = 50_000;
     private static final int DEFAULT_NUMBER_OF_TESTS = 5;
     private static final int RESULTS_ARRAY_LENGTH = DEFAULT_NUMBER_OF_TESTS * 3;
 
