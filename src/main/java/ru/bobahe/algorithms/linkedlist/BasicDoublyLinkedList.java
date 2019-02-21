@@ -67,7 +67,7 @@ public class BasicDoublyLinkedList<E> extends BasicSinglyLinkedList<E> implement
     }
 
     @Override
-    public E getFirstElementValue() {
+    public E getLastElementValue() {
         return lastNode.value;
     }
 }

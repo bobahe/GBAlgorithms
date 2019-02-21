@@ -22,7 +22,7 @@ public class BasicLinkedQueue<E> implements Queue<E> {
 
     @Override
     public E peek() {
-        return data.getFirstElementValue();
+        return data.getLastElementValue();
     }
 
     @Override
