@@ -27,11 +27,10 @@ public class ChainedHashtable<K, V> implements HashTable<K, V> {
 
         if (entry == null) {
             buckets[getBucketIndex(key)].add(new Entry<>(key, value));
+            size++;
         } else {
             entry.value = value;
         }
-
-        size++;
     }
 
     @Override
@@ -71,6 +70,10 @@ public class ChainedHashtable<K, V> implements HashTable<K, V> {
 
     @SuppressWarnings("unchecked")
     private Entry<K, V> getEntryByKey(K key) {
+        if (buckets[getBucketIndex(key)] == null) {
+            return null;
+        }
+
         for (Entry e : buckets[getBucketIndex(key)]) {
             if (e.key.equals(key)) {
                 return e;
@@ -90,11 +93,11 @@ public class ChainedHashtable<K, V> implements HashTable<K, V> {
         return key.hashCode() & (buckets.length - 1);
     }
 
-    class Entry<K, V> {
+    static class Entry<K, V> {
         K key;
         V value;
 
-        public Entry(K key, V value) {
+        Entry(K key, V value) {
             this.key = key;
             this.value = value;
         }
