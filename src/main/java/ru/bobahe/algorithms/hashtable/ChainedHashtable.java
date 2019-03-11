@@ -14,6 +14,7 @@ public class ChainedHashtable<K, V> implements HashTable<K, V> {
         this(DEFAULT_CAPACITY);
     }
 
+    @SuppressWarnings("unchecked")
     public ChainedHashtable(int capacity) {
         buckets = new LinkedList[capacity];
     }
@@ -21,6 +22,9 @@ public class ChainedHashtable<K, V> implements HashTable<K, V> {
     @Override
     public void put(K key, V value) {
         int bucketIndex = key.hashCode() & (buckets.length - 1);
+
+        createListIfNull(bucketIndex);
+
         Entry<K, V> entry = getEntryByKey(key, bucketIndex);
 
         if (entry == null) {
@@ -50,6 +54,7 @@ public class ChainedHashtable<K, V> implements HashTable<K, V> {
         return size == 0;
     }
 
+    @SuppressWarnings("unchecked")
     private Entry<K, V> getEntryByKey(K key, int bucketIndex) {
         for (Entry e : buckets[bucketIndex]) {
             if (e.key.equals(key)) {
@@ -58,6 +63,12 @@ public class ChainedHashtable<K, V> implements HashTable<K, V> {
         }
 
         return null;
+    }
+
+    private void createListIfNull(int bucketIndex) {
+        if (buckets[bucketIndex] == null) {
+            buckets[bucketIndex] = new LinkedList<>();
+        }
     }
 
     class Entry<K, V> {
