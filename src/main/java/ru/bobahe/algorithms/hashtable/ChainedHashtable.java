@@ -21,26 +21,41 @@ public class ChainedHashtable<K, V> implements HashTable<K, V> {
 
     @Override
     public void put(K key, V value) {
-        int bucketIndex = key.hashCode() & (buckets.length - 1);
+        createListIfNull(getBucketIndex(key));
 
-        createListIfNull(bucketIndex);
-
-        Entry<K, V> entry = getEntryByKey(key, bucketIndex);
+        Entry<K, V> entry = getEntryByKey(key);
 
         if (entry == null) {
-            buckets[bucketIndex].add(new Entry<>(key, value));
+            buckets[getBucketIndex(key)].add(new Entry<>(key, value));
         } else {
             entry.value = value;
         }
+
+        size++;
     }
 
     @Override
     public V get(K key) {
+        Entry<K, V> entry = getEntryByKey(key);
+
+        if (entry != null) {
+            return entry.value;
+        }
+
         return null;
     }
 
     @Override
     public boolean remove(K key) {
+        Entry<K, V> entry = getEntryByKey(key);
+
+        if (entry != null) {
+            if (buckets[getBucketIndex(key)].remove(entry)) {
+                size--;
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -55,8 +70,8 @@ public class ChainedHashtable<K, V> implements HashTable<K, V> {
     }
 
     @SuppressWarnings("unchecked")
-    private Entry<K, V> getEntryByKey(K key, int bucketIndex) {
-        for (Entry e : buckets[bucketIndex]) {
+    private Entry<K, V> getEntryByKey(K key) {
+        for (Entry e : buckets[getBucketIndex(key)]) {
             if (e.key.equals(key)) {
                 return e;
             }
@@ -69,6 +84,10 @@ public class ChainedHashtable<K, V> implements HashTable<K, V> {
         if (buckets[bucketIndex] == null) {
             buckets[bucketIndex] = new LinkedList<>();
         }
+    }
+
+    private int getBucketIndex(K key) {
+        return key.hashCode() & (buckets.length - 1);
     }
 
     class Entry<K, V> {
